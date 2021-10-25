@@ -19,16 +19,12 @@ RUN apt-get -y update
 RUN apt install --yes  openjdk-8-jdk openjdk-8-jre
 RUN echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bashrc
 
-#Version numbers
+
 ARG FIREFOX_VERSION=93.0b2
-ARG CHROME_VERSION=95.0.4638.54
+#ARG CHROME_VERSION=latest
 ARG CHROMDRIVER_VERSION=95.0.4638.17
 ARG FIREFOXDRIVER_VERSION=0.30.0
 
-#Install Chrome
-#RUN curl http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_$CHROME_VERSION-1_amd64.deb -o /chrome.deb
-#RUN RUN dpkg -i /chrome.deb; apt-get install -f -y
-#RUN rm /chrome.deb
 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt install --yes ./google-chrome-stable_current_amd64.deb

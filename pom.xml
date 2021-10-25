@@ -46,33 +46,17 @@
             <version>6.10.4</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.github.bonigarcia</groupId>-->
-<!--            <artifactId>webdrivermanager</artifactId>-->
-<!--            <version>4.4.3</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.rest-assured</groupId>-->
-<!--            <artifactId>rest-assured</artifactId>-->
-<!--            <version>4.4.0</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.json</groupId>-->
-<!--            <artifactId>json</artifactId>-->
-<!--            <version>20210307</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-databind</artifactId>-->
-<!--            <version>2.12.3</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.cucumber</groupId>-->
-<!--            <artifactId>cucumber-picocontainer</artifactId>-->
-<!--            <version>6.10.4</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>4.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.trivago.rta</groupId>
+            <artifactId>cluecumber-report-plugin</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.github.cukedoctor</groupId>
             <artifactId>cukedoctor-maven-plugin</artifactId>
@@ -91,26 +75,23 @@
 
             </plugin>
             <plugin>
-                <groupId>com.github.cukedoctor</groupId>
-                <artifactId>cukedoctor-maven-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <outputFileName>TestReport</outputFileName>
-                    <outputDir>docs</outputDir>
-                    <format>html</format>
-                    <toc>left</toc>
-                    <numbered>true</numbered>
-                    <documentTitle>Test Execution Report</documentTitle>
-                    <docVersion>${project.version}</docVersion>
-                </configuration>
+                <groupId>com.trivago.rta</groupId>
+                <artifactId>cluecumber-report-plugin</artifactId>
+                <version>2.7.0</version>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
+                        <id>report</id>
                         <phase>test</phase>
+                        <goals>
+                            <goal>reporting</goal>
+                        </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <sourceJsonReportDirectory>${project.build.directory}/cucumber-report</sourceJsonReportDirectory>
+                    <generatedHtmlReportDirectory>${project.build.directory}/generated-report
+                    </generatedHtmlReportDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>

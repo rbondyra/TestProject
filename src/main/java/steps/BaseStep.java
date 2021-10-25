@@ -1,5 +1,7 @@
 package steps;
 
+import io.cucumber.java.Scenario;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,13 +15,14 @@ import java.util.logging.Level;
 
 public abstract class BaseStep {
     protected WebDriver driver;
+    protected Scenario scenario;
 
     public BaseStep() {
     }
 
     protected void setup(String browser) {
-        System.setProperty("webdriver.gecko.driver", "C:\\Desktop\\driver\\geckodriver.exe");
-        System.setProperty("webdriver.chrome.driver", "C:\\Desktop\\driver\\chromedriver.exe");
+        System.setProperty("webdriver.gecko.driver", "/app/bin/geckodriver");
+        System.setProperty("webdriver.chrome.driver", "/app/bin/chromedriver");
 
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.SEVERE);
@@ -36,12 +39,13 @@ public abstract class BaseStep {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
                 chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.setHeadless(true);
                 driver = new ChromeDriver(chromeOptions);
                 break;
 
             default:
                 throw new RuntimeException("Unsupported browser");
         }
-
+        driver.manage().window().maximize();
     }
 }

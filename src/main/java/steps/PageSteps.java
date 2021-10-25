@@ -17,13 +17,14 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 
 public class PageSteps extends BaseStep {
+
     private final static Logger LOGGER = Logger.getLogger(PageSteps.class.getName());
     private String page = "";
     private final List<String> brokenLinks = new ArrayList<>();
@@ -66,7 +67,6 @@ public class PageSteps extends BaseStep {
         return connection.getResponseCode();
     }
 
-
     private List getAllLinksFromThePage() {
         return driver.findElements(By.tagName("a"))
                 .stream()
@@ -74,45 +74,40 @@ public class PageSteps extends BaseStep {
                 .collect(Collectors.toList());
     }
 
-
     private void verifyLinks(List listOfLinks) {
         listOfLinks.forEach(
                 link -> {
                     if (link == null || ((String) (link)).isEmpty()) {
-                        System.out.println("URL is either not configured for anchor tag or it is empty");
+                        LOGGER.info("URL is either not configured for anchor tag or it is empty");
                     } else if (((String) (link)).startsWith("mailto:") || ((String) (link)).startsWith("tel")) {
-                        System.out.println("Email address or phone number detected");
+                        LOGGER.info("Email address or phone number detected");
                     } else {
                         verifyLink((String) link);
                     }
                 });
     }
 
-
     private void verifyLink(String url) {
         try {
             getHttpResponseCode(url);
             if (getHttpResponseCode(url) >= 400) {
-                System.out.print("Checking: ");
-                System.out.println(url + " - broken");
+                LOGGER.info("Checking url: " + url + " - broken");
                 brokenLinks.add(url);
             } else {
-                System.out.print("Checking: ");
-                System.out.println(url + " - " + " correct");
+                LOGGER.info("Checking url: " + url + " - ok");
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOGGER.warning("Checking url: " + url + " - malformed");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
     @After
-    public void afterScenario() {
-        driver.quit();
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
-
-
 }
 
